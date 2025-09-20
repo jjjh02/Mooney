@@ -17,6 +17,10 @@ public class Offer {
 
     private int offerCnt;
 
+    private String offerSide; // "BUY" / "SELL"
+
+    private String offerStatus; // "PENDING" / "FILLED" / "CANCELED"
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
@@ -25,7 +29,7 @@ public class Offer {
     @JoinColumn(name = "stock_id", nullable = false)
     private Stock stock;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "offer_id", nullable = true, unique = true)
-    private Trade trade;
+    public void isFilled() {
+        this.offerStatus = "FILLED";
+    }
 }

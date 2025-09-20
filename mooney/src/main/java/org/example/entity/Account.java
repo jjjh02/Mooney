@@ -18,4 +18,8 @@ public class Account {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    public void updateCashBalance(int newCashBalance) {
+        this.cashBalance = newCashBalance;
+    }
 }

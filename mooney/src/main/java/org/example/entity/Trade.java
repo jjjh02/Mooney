@@ -13,5 +13,8 @@ public class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tradeId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "offer_id", nullable = false, unique = true)
+    private Offer offer;
 
 }
