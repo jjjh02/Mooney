@@ -43,6 +43,10 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // WebSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 test {
