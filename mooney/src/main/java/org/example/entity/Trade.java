@@ -8,9 +8,10 @@ import lombok.*;
 @Entity
 @Builder
 @AllArgsConstructor
-public class User {
+public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long tradeId;
+
 
 }
