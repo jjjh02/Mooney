@@ -13,7 +13,7 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long offerId;
 
-    private int offerPrice;
+    private double offerPrice;
 
     private int offerCnt;
 

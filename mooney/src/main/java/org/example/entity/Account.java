@@ -13,13 +13,13 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
 
-    private int cashBalance;
+    private double cashBalance;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    public void updateCashBalance(int newCashBalance) {
+    public void updateCashBalance(double newCashBalance) {
         this.cashBalance = newCashBalance;
     }
 }

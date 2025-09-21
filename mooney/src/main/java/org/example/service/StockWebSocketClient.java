@@ -62,7 +62,7 @@ public class StockWebSocketClient {
             if (json.has("output")) {
                 JsonNode output = json.get("output");
                 String stockCode = output.get("stck_shrn_iscd").asText();
-                int price = output.get("stck_prpr").asInt();
+                double price = output.get("stck_prpr").asDouble();
                 String time = output.get("trd_tm").asText();
 
                 offerService.matchOrders(stockCode, price);
