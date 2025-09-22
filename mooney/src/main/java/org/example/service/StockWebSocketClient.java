@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.websocket.*;
 import lombok.RequiredArgsConstructor;
+import org.example.TradeWebSocketHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class StockWebSocketClient {
 
     private final ApprovalKeyService approvalKeyService;
+    private final TradeWebSocketHandler tradeWebSocketHandler;
     private final OfferService offerService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -206,6 +208,7 @@ public class StockWebSocketClient {
             if (!stockCode.isEmpty() && price > 0) {
                 System.out.printf("\uD83D\uDCB0 : %d%n", price);
                 offerService.matchOrders(stockCode, price);
+                tradeWebSocketHandler.sendTrade(stockCode, price);
                 // 필요시 디버그:
                 System.out.printf("📊 [CNT %s] @ %d | raw:%s%n", stockCode, price, rec);
             }

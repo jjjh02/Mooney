@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>실시간 종목별 체결가 그래프</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>실시간 종목별 체결가 그래프</h2>
+<canvas id="tradeChart" width="800" height="400"></canvas>
+
+<script>
+    const ctx = document.getElementById('tradeChart').getContext('2d');
+
+    // Chart.js 초기화
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [], // 시간 축
+            datasets: [] // 종목별 라인 추가
+        },
+        options: {
+            responsive: true,
+            animation: false,
+            scales: {
+                y: { beginAtZero: false }
+            }
+        }
+    });
+
+    // 종목별 데이터셋 관리
+    const datasetsMap = {};
+
+    function getRandomColor() {
+        return 'hsl(' + (360 * Math.random()) + ', 70%, 50%)';
+    }
+
+    // 웹소켓 연결
+    const socket = new WebSocket("ws://localhost:8080/ws/trade");
+
+    socket.onmessage = function(event) {
+        const msg = JSON.parse(event.data);
+        const stock = msg.stock;
+        const price = msg.price;
+        const now = new Date().toLocaleTimeString();
+
+        // 시간축에 새 라벨 추가 (중복 방지)
+        if (!chart.data.labels.includes(now)) {
+            chart.data.labels.push(now);
+        }
+
+        // 종목별 dataset 없으면 새로 추가
+        if (!datasetsMap[stock]) {
+            const color = getRandomColor();
+            const dataset = {
+                label: stock,
+                data: [],
+                borderColor: color,
+                backgroundColor: color,
+                tension: 0.2
+            };
+            datasetsMap[stock] = dataset;
+            chart.data.datasets.push(dataset);
+        }
+
+        // 해당 종목 데이터 추가
+        datasetsMap[stock].data.push(price);
+
+        // 모든 dataset 데이터 길이를 labels 길이에 맞춰 정렬
+        chart.data.datasets.forEach(ds => {
+            while (ds.data.length < chart.data.labels.length) {
+                ds.data.push(null); // 데이터 없는 시점은 null 처리
+            }
+        });
+
+        // 데이터가 너무 많으면 최근 20개만 유지
+        if (chart.data.labels.length > 20) {
+            chart.data.labels.shift();
+            chart.data.datasets.forEach(ds => ds.data.shift());
+        }
+
+        chart.update();
+    };
+</script>
+</body>
+</html>
