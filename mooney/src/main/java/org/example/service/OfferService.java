@@ -25,7 +25,7 @@ public class OfferService {
 
     // 호가랑 체결가가 매칭하는지 확인
     @Transactional
-    public void matchOrders(String stockCode, int currentPrice) {
+    public void matchOrders(String stockCode, double currentPrice) {
         List<Offer> pendingOffers = offerRepository.findByStock_StockCodeAndOfferStatus(stockCode, "PENDING");
 
         for (Offer offer : pendingOffers) {
